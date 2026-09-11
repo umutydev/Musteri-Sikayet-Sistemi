@@ -18,6 +18,7 @@ from app.schemas.ticket import (
     TicketOut,
     TicketStatusUpdate,
 )
+from app.services import notification_service
 
 router = APIRouter(prefix="/tickets", tags=["Tickets"])
 
@@ -50,6 +51,10 @@ async def create_ticket(
     db.add(TicketStatusHistory(
         ticket_id=ticket.id, old_status=None, new_status="new", changed_by=current_user.id,
     ))
+
+    # FR-5.1: havuzdaki temsilcilere yeni kayit bildirimi
+    await notification_service.notify_agents_new_ticket(db, ticket)
+
     await db.commit()
     await db.refresh(ticket)
     return ticket
@@ -132,6 +137,10 @@ async def assign_ticket(
     db.add(TicketStatusHistory(
         ticket_id=ticket.id, old_status="new", new_status="in_review", changed_by=current_user.id,
     ))
+
+    # FR-5.2: musteriye durum degisikligi bildirimi
+    await notification_service.notify_status_change(db, ticket, "new", "in_review")
+
     await db.commit()
     await db.refresh(ticket)
     return ticket
@@ -174,6 +183,10 @@ async def update_status(
         ticket_id=ticket.id, old_status=old_status, new_status=payload.new_status,
         changed_by=current_user.id,
     ))
+
+    # FR-5.2: musteriye durum degisikligi bildirimi
+    await notification_service.notify_status_change(db, ticket, old_status, payload.new_status)
+
     await db.commit()
     await db.refresh(ticket)
     return ticket
@@ -205,6 +218,10 @@ async def add_note(
         is_internal=payload.is_internal,
     )
     db.add(note)
+
+    # Musteriye gorunur bir yanit eklendiyse musteriyi bilgilendir (dahili notlarda bildirim yok)
+    await notification_service.notify_new_note(db, ticket, current_user, payload.is_internal)
+
     await db.commit()
     await db.refresh(note)
     return note
