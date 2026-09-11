@@ -6,8 +6,6 @@ banka personelinin ise bu kayıtları inceleyip sonuçlandırabildiği bir siste
 Staj programı kapsamında geliştirilmektedir.
 
 ## Mimari
-git add README.md
-
 ┌─────────────────────────────────────┐
 │ iOS Uygulaması (Swift / SwiftUI) │
 │ Müşteri · Temsilci · Admin │
