@@ -38,6 +38,10 @@
 		4CA986FA304EF14E0024821A /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA986F9304EF14A0024821A /* Ticket.swift */; };
 		4CD552243057D446002E65CD /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD552233057D43E002E65CD /* Notification.swift */; };
 		4CD552263057D533002E65CD /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD552253057D52F002E65CD /* NotificationService.swift */; };
+		4CF405213057E0470014AB0B /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF405203057E0450014AB0B /* Attachment.swift */; };
+		4CF405233057E0B90014AB0B /* AttachmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF405223057E0B50014AB0B /* AttachmentService.swift */; };
+		4CF405253057E0E30014AB0B /* AttachmentPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF405243057E0E20014AB0B /* AttachmentPicker.swift */; };
+		4CF405273057E8A10014AB0B /* FilePreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF405263057E89F0014AB0B /* FilePreview.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +77,10 @@
 		4CA986F9304EF14A0024821A /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		4CD552233057D43E002E65CD /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		4CD552253057D52F002E65CD /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		4CF405203057E0450014AB0B /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
+		4CF405223057E0B50014AB0B /* AttachmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentService.swift; sourceTree = "<group>"; };
+		4CF405243057E0E20014AB0B /* AttachmentPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentPicker.swift; sourceTree = "<group>"; };
+		4CF405263057E89F0014AB0B /* FilePreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePreview.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -130,6 +138,7 @@
 		4C45FD5A3049B4A80005058F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4CF405203057E0450014AB0B /* Attachment.swift */,
 				4CD552233057D43E002E65CD /* Notification.swift */,
 				4CA986F9304EF14A0024821A /* Ticket.swift */,
 				4CA986B0304EE3690024821A /* TicketNote.swift */,
@@ -144,6 +153,7 @@
 		4CA986B1304EE3880024821A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				4CF405223057E0B50014AB0B /* AttachmentService.swift */,
 				4CD552253057D52F002E65CD /* NotificationService.swift */,
 				4CA986B6304EE3E20024821A /* CategoryService.swift */,
 				4CA986B5304EE3CE0024821A /* TicketService.swift */,
@@ -177,6 +187,8 @@
 		4CA986BC304EE47A0024821A /* shared */ = {
 			isa = PBXGroup;
 			children = (
+				4CF405263057E89F0014AB0B /* FilePreview.swift */,
+				4CF405243057E0E20014AB0B /* AttachmentPicker.swift */,
 				4CA986C7304EE5870024821A /* ProfileView.swift */,
 				4CA986C6304EE5750024821A /* NotificationsView.swift */,
 				4CA986C5304EE5580024821A /* TicketDetailView.swift */,
@@ -294,18 +306,22 @@
 			files = (
 				4CA986DA304EEF260024821A /* CategoryManagementView.swift in Sources */,
 				4CD552263057D533002E65CD /* NotificationService.swift in Sources */,
+				4CF405233057E0B90014AB0B /* AttachmentService.swift in Sources */,
 				4CA986DB304EEF260024821A /* TeamsView.swift in Sources */,
 				4CA986DC304EEF260024821A /* UserManagementView.swift in Sources */,
+				4CF405213057E0470014AB0B /* Attachment.swift in Sources */,
 				4CA986DD304EEF260024821A /* AdminSettingsHubView.swift in Sources */,
 				4CA986DE304EEF260024821A /* AdminOverviewView.swift in Sources */,
 				4CA986DF304EEF260024821A /* AgentTasksView.swift in Sources */,
 				4CA986E0304EEF260024821A /* CreateTicketView.swift in Sources */,
+				4CF405253057E0E30014AB0B /* AttachmentPicker.swift in Sources */,
 				4CA986FA304EF14E0024821A /* Ticket.swift in Sources */,
 				4CA986E1304EEF260024821A /* MyTicketsView.swift in Sources */,
 				4CA986E2304EEF260024821A /* CustomerHomeView.swift in Sources */,
 				4CA986E3304EEF260024821A /* ProfileView.swift in Sources */,
 				4CA986E4304EEF260024821A /* NotificationsView.swift in Sources */,
 				4CA986E5304EEF260024821A /* TicketDetailView.swift in Sources */,
+				4CF405273057E8A10014AB0B /* FilePreview.swift in Sources */,
 				4CA986E6304EEF260024821A /* RegisterView.swift in Sources */,
 				4CA986E7304EEF260024821A /* LoginView.swift in Sources */,
 				4CA986E8304EEF260024821A /* TicketRowView.swift in Sources */,
