@@ -39,6 +39,68 @@ actor APIClient {
         do { return try decoder.decode(Response.self, from: data) }
         catch { throw APIError.decoding(error) }
     }
+    /// Multipart/form-data ile dosya yukler.
+    /// JSON gonderen request() fonksiyonundan ayri tutuldu cunku govde formati tamamen farkli.
+    func upload<Response: Decodable>(
+        path: String,
+        fileName: String,
+        contentType: String,
+        data: Data,
+        fieldName: String = "file"
+    ) async throws -> Response {
+        let url = APIConfig.baseURL.appendingPathComponent(path)
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+
+        // Boundary: govdedeki bolumleri ayiran benzersiz isaretci
+        let boundary = "Boundary-\(UUID().uuidString)"
+        req.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+
+        if let token = await TokenStore.shared.accessToken {
+            req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+
+        var body = Data()
+        body.append("--\(boundary)\r\n".data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"\(fieldName)\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: \(contentType)\r\n\r\n".data(using: .utf8)!)
+        body.append(data)
+        body.append("\r\n--\(boundary)--\r\n".data(using: .utf8)!)
+        req.httpBody = body
+
+        let (responseData, response): (Data, URLResponse)
+        do {
+            (responseData, response) = try await session.data(for: req)
+        } catch {
+            throw APIError.network(error)
+        }
+
+        guard let http = response as? HTTPURLResponse else {
+            throw APIError.network(URLError(.badServerResponse))
+        }
+
+        switch http.statusCode {
+        case 200...299:
+            do { return try decoder.decode(Response.self, from: responseData) }
+            catch { throw APIError.decoding(error) }
+        case 400:
+            let msg = (try? decoder.decode(APIErrorResponse.self, from: responseData))?.detail
+                ?? "Dosya yüklenemedi."
+            throw APIError.validationError(msg)
+        case 401:
+            await AuthManager.shared.logout()
+            throw APIError.unauthorized
+        case 403:
+            let msg = (try? decoder.decode(APIErrorResponse.self, from: responseData))?.detail ?? ""
+            throw APIError.forbidden(msg)
+        case 409:
+            let msg = (try? decoder.decode(APIErrorResponse.self, from: responseData))?.detail ?? "Çakışma oluştu."
+            throw APIError.conflict(msg)
+        default:
+            let msg = (try? decoder.decode(APIErrorResponse.self, from: responseData))?.detail ?? ""
+            throw APIError.server(msg)
+        }
+    }
 
     private func rawRequest<Body: Encodable>(
         path: String, method: Method, body: Body?,
