@@ -11,6 +11,8 @@ struct CreateTicketView: View {
     @State private var isSubmitting = false
     @State private var errorMessage: String?
     @State private var createdRef: String?
+    @State private var pendingAttachments: [PendingAttachment] = []
+    @State private var uploadProgress: String?
 
     private var isFormValid: Bool {
         selectedCategory != nil && subject.count >= 5 && description.count >= 20
@@ -114,31 +116,9 @@ struct CreateTicketView: View {
                             }
 
                             // Dosya ekleme alanı (görsel — backend hazır olunca aktifleşecek)
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Dosya/Fotoğraf Ekle")
-                                    .font(.system(size: 15, weight: .semibold))
-                                    .foregroundStyle(AppTheme.navy)
-                                VStack(spacing: 8) {
-                                    Image(systemName: "icloud.and.arrow.up")
-                                        .font(.system(size: 32))
-                                        .foregroundStyle(AppTheme.primary)
-                                    Text("Dosya Yükle")
-                                        .font(.system(size: 16, weight: .semibold))
-                                        .foregroundStyle(AppTheme.primary)
-                                    Text("PNG, JPG, PDF (Maks. 10MB)")
-                                        .font(.caption)
-                                        .foregroundStyle(.secondary)
-                                }
-                                .frame(maxWidth: .infinity)
-                                .padding(.vertical, 28)
-                                .background(AppTheme.inputBackground)
-                                .clipShape(RoundedRectangle(cornerRadius: 12))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6]))
-                                        .foregroundStyle(Color.gray.opacity(0.4))
-                                )
-                            }
+                            
+                            AttachmentPicker(attachments: $pendingAttachments)
+
 
                             if let errorMessage {
                                 Text(errorMessage).font(.footnote).foregroundStyle(.red)
@@ -148,7 +128,11 @@ struct CreateTicketView: View {
                                     .font(.footnote.bold())
                                     .foregroundStyle(.green)
                             }
-
+                            if let uploadProgress {
+                                Text(uploadProgress)
+                                    .font(.caption)
+                                    .foregroundStyle(AppTheme.primary)
+                            }
                             Button {
                                 Task { await submit() }
                             } label: {
@@ -188,10 +172,21 @@ struct CreateTicketView: View {
         isSubmitting = true
         errorMessage = nil
         defer { isSubmitting = false }
+
         do {
-            let req = TicketCreateRequest(type: type, categoryId: category.id, subject: subject, description: description)
+            let req = TicketCreateRequest(
+                type: type, categoryId: category.id, subject: subject, description: description
+            )
             let ticket = try await TicketService.shared.createTicket(req)
             createdRef = ticket.referenceNo
+
+            // Kayit olustuktan SONRA dosyalari yukle - attachments endpoint'i ticket_id istiyor
+            for (index, pending) in pendingAttachments.enumerated() {
+                uploadProgress = "Dosya yükleniyor (\(index + 1)/\(pendingAttachments.count))..."
+                _ = try? await AttachmentService.shared.upload(ticketId: ticket.id, pending: pending)
+            }
+            uploadProgress = nil
+
             try? await Task.sleep(for: .seconds(1))
             dismiss()
         } catch {

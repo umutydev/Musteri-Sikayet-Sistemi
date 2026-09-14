@@ -9,6 +9,10 @@ struct TicketDetailView: View {
     @State private var newNoteText = ""
     @State private var isInternalNote = false
     @State private var showResolveSheet = false
+    @State private var attachments: [Attachment] = []
+    @State private var previewItem: PreviewItem?
+    @State private var downloadingId: UUID?
+
 
     private var isStaff: Bool {
         auth.currentUser?.role == .agent || auth.currentUser?.role == .admin
@@ -23,6 +27,7 @@ struct TicketDetailView: View {
                     VStack(spacing: 16) {
                         headerCard(ticket)
                         descriptionCard(ticket)
+                        if !attachments.isEmpty { attachmentsCard }
                         timelineCard(ticket)
                         if isStaff { staffActionsCard(ticket) }
                         messagesCard
@@ -36,6 +41,9 @@ struct TicketDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .task { await load() }
         .refreshable { await load() }
+        .sheet(item: $previewItem) { item in
+            FilePreview(url: item.url)
+        }
     }
 
     private func headerCard(_ t: Ticket) -> some View {
@@ -63,6 +71,55 @@ struct TicketDetailView: View {
         .background(AppTheme.card)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
+    private var attachmentsCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Ekli Dosyalar (\(attachments.count))")
+                .font(.system(size: 19, weight: .bold))
+                .foregroundStyle(AppTheme.navy)
+
+            ForEach(attachments) { item in
+                Button {
+                    Task { await openAttachment(item) }
+                } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: item.iconName)
+                            .font(.system(size: 20))
+                            .foregroundStyle(AppTheme.primary)
+                            .frame(width: 40, height: 40)
+                            .background(AppTheme.primary.opacity(0.12))
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(item.fileName)
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundStyle(AppTheme.navy)
+                                .lineLimit(1)
+                            Text(item.uploadedAt.formatted(date: .abbreviated, time: .shortened))
+                                .font(.system(size: 12))
+                                .foregroundStyle(.secondary)
+                        }
+
+                        Spacer()
+
+                        if downloadingId == item.id {
+                            ProgressView()
+                        } else {
+                            Image(systemName: "eye")
+                                .foregroundStyle(AppTheme.primary)
+                        }
+                    }
+                    .padding(12)
+                    .background(AppTheme.inputBackground)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(18)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(AppTheme.card)
+        .clipShape(RoundedRectangle(cornerRadius: 16))
+    }
 
     private func descriptionCard(_ t: Ticket) -> some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -78,7 +135,17 @@ struct TicketDetailView: View {
         .background(AppTheme.card)
         .clipShape(RoundedRectangle(cornerRadius: 16))
     }
-
+    
+    private func openAttachment(_ item: Attachment) async {
+        downloadingId = item.id
+        defer { downloadingId = nil }
+        do {
+            let url = try await AttachmentService.shared.download(ticketId: ticketId, attachment: item)
+            previewItem = PreviewItem(url: url)
+        } catch {
+            print("❌ İndirme hatası: \(error)")
+        }
+    }
     /// Tasarımdaki "Süreç Akışı" — durumun hangi aşamada olduğunu gösteren dikey çizelge
     private func timelineCard(_ t: Ticket) -> some View {
         let steps: [(TicketStatus, String)] = [
@@ -229,8 +296,10 @@ struct TicketDetailView: View {
     private func load() async {
         async let t = TicketService.shared.getTicket(id: ticketId)
         async let n = TicketService.shared.listNotes(ticketId: ticketId)
+        async let a = AttachmentService.shared.listAttachments(ticketId: ticketId)
         ticket = try? await t
         notes = (try? await n) ?? []
+        attachments = (try? await a) ?? []
     }
 
     private func submitNote() async {
