@@ -8,6 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.api.deps import get_current_user, require_roles
 from app.db.session import get_db
+from app.models.category import Category
 from app.models.ticket import VALID_TRANSITIONS, Ticket
 from app.models.ticket_extras import TicketNote, TicketStatusHistory
 from app.models.user import User
@@ -73,8 +74,12 @@ async def list_tickets(
     """
     Yetki kapsami (bkz. 07-rest-api-tasarimi.md):
     - customer -> sadece kendi kayitlari
-    - agent    -> kendisine atananlar + (pool=true ise) atanmamis kayitlar
+    - agent    -> kendisine atananlar + (pool=true ise) ekibinin havuzu
     - admin    -> tum kayitlar
+
+    Ekip mantigi: temsilci bir ekibe atanmissa, havuzda yalnizca kendi ekibine
+    bagli kategorilerdeki kayitlari gorur. Ekibi yoksa tum havuzu gorur
+    (geriye donuk uyumluluk - ekip tanimlanmadan once olusturulmus hesaplar icin).
     """
     query = select(Ticket)
 
@@ -83,6 +88,13 @@ async def list_tickets(
     elif current_user.role == "agent":
         if pool:
             query = query.where(Ticket.assigned_to.is_(None), Ticket.status == "new")
+
+            if current_user.team_id is not None:
+                # Ekibin sorumlu oldugu kategoriler + hicbir ekibe atanmamis kategoriler
+                team_categories = select(Category.id).where(
+                    (Category.team_id == current_user.team_id) | (Category.team_id.is_(None))
+                )
+                query = query.where(Ticket.category_id.in_(team_categories))
         else:
             query = query.where(Ticket.assigned_to == current_user.id)
     # admin -> filtre yok, tum kayitlar

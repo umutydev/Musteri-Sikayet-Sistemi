@@ -69,12 +69,22 @@ async def notify_new_note(
 
 async def notify_agents_new_ticket(db: AsyncSession, ticket: Ticket) -> None:
     """
-    FR-5.1: Yeni kayit olustugunda temsilci havuzuna bildirim duser.
-    Aktif tum temsilcilere bildirim olusturulur.
+    FR-5.1: Yeni kayit olustugunda ilgili temsilcilere bildirim duser.
+
+    Ekip mantigi: kaydin kategorisi bir ekibe bagliysa yalnizca o ekibin uyeleri
+    bilgilendirilir. Kategori bir ekibe bagli degilse, ekibi olmayan tum
+    temsilciler bilgilendirilir (genel havuz).
     """
-    result = await db.execute(
-        select(User).where(User.role == "agent", User.is_active.is_(True))
-    )
+    from app.models.category import Category  # dairesel import olmamasi icin lokal
+
+    category = await db.get(Category, ticket.category_id)
+    team_id = category.team_id if category else None
+
+    query = select(User).where(User.role == "agent", User.is_active.is_(True))
+    if team_id is not None:
+        query = query.where(User.team_id == team_id)
+
+    result = await db.execute(query)
     agents = result.scalars().all()
 
     message = f"Havuza yeni bir kayit eklendi: {ticket.reference_no}"
