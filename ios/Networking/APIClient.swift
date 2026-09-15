@@ -16,8 +16,12 @@ actor APIClient {
         encoder.dateEncodingStrategy = .iso8601
     }
 
-    enum Method: String { case get = "GET", post = "POST", patch = "PATCH" }
-
+    enum Method: String {
+        case get = "GET"
+        case post = "POST"
+        case patch = "PATCH"
+        case delete = "DELETE"
+    }
     private struct EmptyBody: Encodable {}
 
     /// Body gönderen istekler (POST/PATCH)
@@ -28,6 +32,18 @@ actor APIClient {
         let data = try await rawRequest(path: path, method: method, body: body, queryItems: queryItems, requiresAuth: requiresAuth)
         do { return try decoder.decode(Response.self, from: data) }
         catch { throw APIError.decoding(error) }
+    }
+    /// Yanit govdesi beklemeyen istekler icin (DELETE, 204 No Content vb.)
+    func requestVoid(
+        path: String,
+        method: Method,
+        queryItems: [URLQueryItem]? = nil,
+        requiresAuth: Bool = true
+    ) async throws {
+        _ = try await rawRequest(
+            path: path, method: method, body: nil as EmptyBody?,
+            queryItems: queryItems, requiresAuth: requiresAuth
+        )
     }
 
     /// Body göndermeyen istekler (GET vb.)
