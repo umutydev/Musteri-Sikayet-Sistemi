@@ -19,6 +19,7 @@ class UserUpdate(BaseModel):
     phone: str | None = None
     role: str | None = Field(default=None, pattern="^(customer|agent|admin)$")
     is_active: bool | None = None
+    team_id: uuid.UUID | None = None
 
 
 class UserSelfUpdate(BaseModel):
@@ -38,6 +39,7 @@ class UserDetailOut(BaseModel):
     phone: str | None
     role: str
     is_active: bool
+    team_id: uuid.UUID | None
     created_at: datetime
 
     model_config = {"from_attributes": True}

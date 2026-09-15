@@ -135,6 +135,10 @@ async def update_user(
         user.role = payload.role
     if payload.is_active is not None:
         user.is_active = payload.is_active
+    # team_id icin None anlamli bir deger (ekipten cikarma), bu yuzden
+    # alanin gonderilip gonderilmedigini kontrol ediyoruz
+    if "team_id" in payload.model_fields_set:
+        user.team_id = payload.team_id
 
     await db.commit()
     await db.refresh(user)
