@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4C232B4830596DEC00546DD7 /* UserManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C232B4730596DE600546DD7 /* UserManagement.swift */; };
+		4C232B4A30596E2700546DD7 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C232B4930596E2200546DD7 /* UserService.swift */; };
+		4C85933B30598466003A7214 /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C85933A30598464003A7214 /* Team.swift */; };
+		4C85933D3059851E003A7214 /* Team Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C85933C3059851A003A7214 /* Team Service.swift */; };
+		4C85933F3059856C003A7214 /* TeamDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C85933E30598560003A7214 /* TeamDetailView.swift */; };
 		4CA986DA304EEF260024821A /* CategoryManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA986D4304EE6830024821A /* CategoryManagementView.swift */; };
 		4CA986DB304EEF260024821A /* TeamsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA986D3304EE6660024821A /* TeamsView.swift */; };
 		4CA986DC304EEF260024821A /* UserManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA986D2304EE64B0024821A /* UserManagementView.swift */; };
@@ -45,8 +50,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4C232B4730596DE600546DD7 /* UserManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagement.swift; sourceTree = "<group>"; };
+		4C232B4930596E2200546DD7 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		4C45FD4C3049980C0005058F /* SikayetApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SikayetApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4C45FD5B3049B4D20005058F /* user.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = user.swift; sourceTree = "<group>"; };
+		4C85933A30598464003A7214 /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
+		4C85933C3059851A003A7214 /* Team Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Team Service.swift"; sourceTree = "<group>"; };
+		4C85933E30598560003A7214 /* TeamDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDetailView.swift; sourceTree = "<group>"; };
 		4CA986AD304EE1CA0024821A /* category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = category.swift; sourceTree = "<group>"; };
 		4CA986AE304EE1EA0024821A /* TicketRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TicketRequests.swift; sourceTree = "<group>"; };
 		4CA986AF304EE3530024821A /* AuthRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthRequests.swift; sourceTree = "<group>"; };
@@ -138,6 +148,8 @@
 		4C45FD5A3049B4A80005058F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4C85933A30598464003A7214 /* Team.swift */,
+				4C232B4730596DE600546DD7 /* UserManagement.swift */,
 				4CF405203057E0450014AB0B /* Attachment.swift */,
 				4CD552233057D43E002E65CD /* Notification.swift */,
 				4CA986F9304EF14A0024821A /* Ticket.swift */,
@@ -153,6 +165,8 @@
 		4CA986B1304EE3880024821A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				4C85933C3059851A003A7214 /* Team Service.swift */,
+				4C232B4930596E2200546DD7 /* UserService.swift */,
 				4CF405223057E0B50014AB0B /* AttachmentService.swift */,
 				4CD552253057D52F002E65CD /* NotificationService.swift */,
 				4CA986B6304EE3E20024821A /* CategoryService.swift */,
@@ -221,6 +235,7 @@
 		4CA986CC304EE5E50024821A /* Admin */ = {
 			isa = PBXGroup;
 			children = (
+				4C85933E30598560003A7214 /* TeamDetailView.swift */,
 				4CA986D4304EE6830024821A /* CategoryManagementView.swift */,
 				4CA986D3304EE6660024821A /* TeamsView.swift */,
 				4CA986D2304EE64B0024821A /* UserManagementView.swift */,
@@ -310,9 +325,11 @@
 				4CA986DB304EEF260024821A /* TeamsView.swift in Sources */,
 				4CA986DC304EEF260024821A /* UserManagementView.swift in Sources */,
 				4CF405213057E0470014AB0B /* Attachment.swift in Sources */,
+				4C85933F3059856C003A7214 /* TeamDetailView.swift in Sources */,
 				4CA986DD304EEF260024821A /* AdminSettingsHubView.swift in Sources */,
 				4CA986DE304EEF260024821A /* AdminOverviewView.swift in Sources */,
 				4CA986DF304EEF260024821A /* AgentTasksView.swift in Sources */,
+				4C232B4830596DEC00546DD7 /* UserManagement.swift in Sources */,
 				4CA986E0304EEF260024821A /* CreateTicketView.swift in Sources */,
 				4CF405253057E0E30014AB0B /* AttachmentPicker.swift in Sources */,
 				4CA986FA304EF14E0024821A /* Ticket.swift in Sources */,
@@ -329,10 +346,13 @@
 				4CA986EA304EEF260024821A /* AuthManager.swift in Sources */,
 				4CD552243057D446002E65CD /* Notification.swift in Sources */,
 				4CA986EB304EEF260024821A /* TokenStore.swift in Sources */,
+				4C85933D3059851E003A7214 /* Team Service.swift in Sources */,
+				4C85933B30598466003A7214 /* Team.swift in Sources */,
 				4CA986EC304EEF260024821A /* CategoryService.swift in Sources */,
 				4CA986ED304EEF260024821A /* TicketService.swift in Sources */,
 				4CA986EE304EEF260024821A /* APIClient.swift in Sources */,
 				4CA986EF304EEF260024821A /* APIError.swift in Sources */,
+				4C232B4A30596E2700546DD7 /* UserService.swift in Sources */,
 				4CA986F0304EEF260024821A /* APIConfig.swift in Sources */,
 				4CA986F1304EEF260024821A /* TicketNote.swift in Sources */,
 				4CA986F2304EEF260024821A /* AuthRequests.swift in Sources */,
