@@ -21,5 +21,17 @@ class Settings(BaseSettings):
     UPLOAD_DIR: str = "./uploads"
     MAX_UPLOAD_SIZE_MB: int = 10
 
+    # --- E-posta ---
+    # "console" : e-postalar gonderilmez, sunucu loguna yazilir (gelistirme)
+    # "smtp"    : gercek e-posta gonderilir (asagidaki SMTP ayarlari gerekir)
+    EMAIL_BACKEND: str = "console"
+
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: str = ""
+    SMTP_PASSWORD: str = ""        # Gmail icin "uygulama sifresi", normal sifre calismaz
+    EMAIL_FROM: str = ""           # Bos birakilirsa SMTP_USER kullanilir
+    EMAIL_FROM_NAME: str = "Banka Destek"
+
 
 settings = Settings()
