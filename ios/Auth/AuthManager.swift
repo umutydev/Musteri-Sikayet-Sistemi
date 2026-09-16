@@ -58,6 +58,35 @@ final class AuthManager: ObservableObject {
             return false
         }
     }
+    /// FR-1.3: Sifirlama kodu ister. Gelistirme ortaminda kodu geri dondurur.
+    func requestPasswordReset(email: String) async -> String? {
+        do {
+            let body = ForgotPasswordRequest(email: email)
+            let response: ForgotPasswordResponse = try await APIClient.shared.request(
+                path: "/auth/forgot-password", method: .post, body: body, requiresAuth: false
+            )
+            lastError = nil
+            return response.debugCode
+        } catch {
+            lastError = (error as? APIError)?.errorDescription ?? "İşlem başarısız."
+            return nil
+        }
+    }
+
+    /// FR-1.3: Kodu dogrulayip yeni sifreyi kaydeder.
+    func resetPassword(email: String, code: String, newPassword: String) async -> Bool {
+        do {
+            let body = ResetPasswordRequest(email: email, code: code, newPassword: newPassword)
+            let _: User = try await APIClient.shared.request(
+                path: "/auth/reset-password", method: .post, body: body, requiresAuth: false
+            )
+            lastError = nil
+            return true
+        } catch {
+            lastError = (error as? APIError)?.errorDescription ?? "Şifre sıfırlanamadı."
+            return false
+        }
+    }
 
     private func restoreSession() async {
         defer { isLoading = false }

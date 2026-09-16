@@ -38,3 +38,28 @@ struct TokenResponse: Codable {
         case user
     }
 }
+
+struct ForgotPasswordRequest: Codable {
+    let email: String
+}
+
+struct ForgotPasswordResponse: Codable {
+    let message: String
+    let debugCode: String?
+
+    enum CodingKeys: String, CodingKey {
+        case message
+        case debugCode = "debug_code"
+    }
+}
+
+struct ResetPasswordRequest: Codable {
+    let email: String
+    let code: String
+    let newPassword: String
+
+    enum CodingKeys: String, CodingKey {
+        case email, code
+        case newPassword = "new_password"
+    }
+}
