@@ -19,7 +19,7 @@ from app.schemas.ticket import (
     TicketOut,
     TicketStatusUpdate,
 )
-from app.services import notification_service
+from app.services import email_service, notification_service
 
 router = APIRouter(prefix="/tickets", tags=["Tickets"])
 
@@ -58,6 +58,11 @@ async def create_ticket(
 
     await db.commit()
     await db.refresh(ticket)
+
+    # Basvuru alindi e-postasi (EMAIL_BACKEND=console ise yalnizca loglanir)
+    await email_service.send_ticket_created(
+        to=current_user.email, reference_no=ticket.reference_no, subject_line=ticket.subject
+    )
     return ticket
 
 
@@ -201,6 +206,18 @@ async def update_status(
 
     await db.commit()
     await db.refresh(ticket)
+
+    # Durum degisikligi e-postasi - musterinin adresini ayrica cekiyoruz
+    customer = await db.get(User, ticket.customer_id)
+    if customer is not None:
+        await email_service.send_status_changed(
+            to=customer.email,
+            reference_no=ticket.reference_no,
+            status_label=notification_service.STATUS_LABELS.get(
+                payload.new_status, payload.new_status
+            ),
+            resolution_note=payload.resolution_note,
+        )
     return ticket
 
 
