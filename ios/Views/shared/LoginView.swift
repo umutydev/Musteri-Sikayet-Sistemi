@@ -6,6 +6,7 @@ struct LoginView: View {
     @State private var password = ""
     @State private var isSubmitting = false
     @State private var showRegister = false
+    @State private var showForgotPassword = false
 
     var body: some View {
         NavigationStack {
@@ -19,26 +20,17 @@ struct LoginView: View {
                         // Kart
                         VStack(spacing: 20) {
                             // Logo alanı
-                            Circle()
-                                .fill(AppTheme.primary)
-                                .frame(width: 88, height: 88)
-                                .overlay(
-                                    Image(systemName: "building.columns.fill")
-                                        .font(.system(size: 38))
-                                        .foregroundStyle(.white)
-                                )
+                            SolviaLogo(size: 88)
                                 .padding(.top, 8)
 
                             VStack(spacing: 6) {
-                                Text("ResolvePoint")
+                                Text("Solvia")
                                     .font(.system(size: 32, weight: .bold))
                                     .foregroundStyle(AppTheme.navy)
-                                Text("Empatik çözüm alanınız.")
+                                Text("Çözüme giden yol")
                                     .font(.system(size: 17))
                                     .foregroundStyle(.secondary)
                             }
-
-                            VStack(spacing: 16) {
                                 // E-posta
                                 VStack(alignment: .leading, spacing: 8) {
                                     Text("E-posta Adresi")
@@ -66,8 +58,7 @@ struct LoginView: View {
                                             .font(.system(size: 15, weight: .semibold))
                                             .foregroundStyle(AppTheme.navy)
                                         Spacer()
-                                        Button("Şifremi Unuttum?") {}
-                                            .font(.system(size: 15, weight: .semibold))
+                                        Button("Şifremi Unuttum?") { showForgotPassword = true }                                            .font(.system(size: 15, weight: .semibold))
                                             .foregroundStyle(AppTheme.primary)
                                     }
 
@@ -133,12 +124,12 @@ struct LoginView: View {
                 }
             }
             .sheet(isPresented: $showRegister) { RegisterView() }
+            .sheet(isPresented: $showForgotPassword) { ForgotPasswordView() }
         }
-    }
-
     private func submit() async {
         isSubmitting = true
         defer { isSubmitting = false }
         _ = await auth.login(email: email, password: password)
     }
 }
+

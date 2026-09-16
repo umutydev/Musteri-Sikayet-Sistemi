@@ -22,18 +22,11 @@ struct RegisterView: View {
 
                 ScrollView {
                     VStack(spacing: 24) {
-                        Circle()
-                            .fill(AppTheme.primary)
-                            .frame(width: 72, height: 72)
-                            .overlay(
-                                Image(systemName: "person.badge.plus")
-                                    .font(.system(size: 30))
-                                    .foregroundStyle(.white)
-                            )
+                        SolviaLogo(size: 72)
                             .padding(.top, 24)
 
                         VStack(spacing: 8) {
-                            Text("ResolvePoint")
+                            Text("Solvia")
                                 .font(.system(size: 30, weight: .bold))
                                 .foregroundStyle(AppTheme.primary)
                             Text("Şikayetlerinizi iletmek ve takip etmek için hesabınızı oluşturun.")
