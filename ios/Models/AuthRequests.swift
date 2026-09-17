@@ -63,3 +63,13 @@ struct ResetPasswordRequest: Codable {
         case newPassword = "new_password"
     }
 }
+
+struct ChangePasswordRequest: Codable {
+    let currentPassword: String
+    let newPassword: String
+
+    enum CodingKeys: String, CodingKey {
+        case currentPassword = "current_password"
+        case newPassword = "new_password"
+    }
+}

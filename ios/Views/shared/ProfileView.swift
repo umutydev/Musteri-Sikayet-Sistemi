@@ -5,6 +5,8 @@ struct ProfileView: View {
     @State private var showLogoutConfirm = false
     @State private var emailNotifications = true
     @State private var smsNotifications = false
+    @State private var showChangePassword = false
+    @State private var showCreateTicket = false
 
     var body: some View {
         NavigationStack {
@@ -43,8 +45,12 @@ struct ProfileView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 18))
 
                         SettingsSection(title: "Hesap Ayarları") {
-                            SettingsRow(icon: "lock", title: "Şifre Değiştir")
-                            SettingsRow(icon: "shield", title: "İki Faktörlü Doğrulama")
+                            Button {
+                                showChangePassword = true
+                            } label: {
+                                SettingsRow(icon: "lock", title: "Şifre Değiştir")
+                            }
+                            .buttonStyle(.plain)
                         }
 
                         VStack(alignment: .leading, spacing: 4) {
@@ -76,10 +82,22 @@ struct ProfileView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16))
 
                         SettingsSection(title: "Destek") {
-                            SettingsRow(icon: "questionmark.circle", title: "Yardım Merkezi ve SSS")
-                            SettingsRow(icon: "bubble.left", title: "Destekle İletişime Geç")
-                        }
+                            NavigationLink {
+                                FAQView()
+                            } label: {
+                                SettingsRow(icon: "questionmark.circle", title: "Yardım Merkezi ve SSS")
+                            }
+                            .buttonStyle(.plain)
 
+                            Divider().padding(.vertical, 4)
+
+                            NavigationLink {
+                                ContactSupportView()
+                            } label: {
+                                SettingsRow(icon: "bubble.left", title: "Destekle İletişime Geç")
+                            }
+                            .buttonStyle(.plain)
+                        }
                         Button {
                             showLogoutConfirm = true
                         } label: {
@@ -99,6 +117,13 @@ struct ProfileView: View {
             .confirmationDialog("Çıkış yapmak istediğinize emin misiniz?", isPresented: $showLogoutConfirm) {
                 Button("Çıkış Yap", role: .destructive) { Task { await auth.logout() } }
                 Button("Vazgeç", role: .cancel) {}
+
+            }
+            .sheet(isPresented: $showChangePassword) {
+                ChangePasswordView()
+            }
+            .sheet(isPresented: $showCreateTicket) {
+                CreateTicketView()
             }
         }
     }

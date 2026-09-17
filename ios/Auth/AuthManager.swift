@@ -5,17 +5,17 @@ import SwiftUI
 @MainActor
 final class AuthManager: ObservableObject {
     static let shared = AuthManager()
-
+    
     @Published private(set) var currentUser: User?
     @Published private(set) var isLoading = true
     @Published var lastError: String?
-
+    
     private init() {
         Task { await restoreSession() }
     }
-
+    
     var isAuthenticated: Bool { currentUser != nil }
-
+    
     func register(fullName: String, email: String, phone: String?, password: String) async -> Bool {
         do {
             let body = RegisterRequest(fullName: fullName, email: email, phone: phone, password: password)
@@ -26,7 +26,7 @@ final class AuthManager: ObservableObject {
             return false
         }
     }
-
+    
     func login(email: String, password: String) async -> Bool {
         do {
             let body = LoginRequest(email: email, password: password)
@@ -40,12 +40,12 @@ final class AuthManager: ObservableObject {
             return false
         }
     }
-
+    
     func logout() async {
         await TokenStore.shared.clear()
         currentUser = nil
     }
-
+    
     func refreshAccessToken() async -> Bool {
         guard let refreshToken = await TokenStore.shared.refreshToken else { return false }
         do {
@@ -72,7 +72,7 @@ final class AuthManager: ObservableObject {
             return nil
         }
     }
-
+    
     /// FR-1.3: Kodu dogrulayip yeni sifreyi kaydeder.
     func resetPassword(email: String, code: String, newPassword: String) async -> Bool {
         do {
@@ -87,7 +87,7 @@ final class AuthManager: ObservableObject {
             return false
         }
     }
-
+    
     private func restoreSession() async {
         defer { isLoading = false }
         guard await TokenStore.shared.accessToken != nil else { return }
@@ -96,6 +96,20 @@ final class AuthManager: ObservableObject {
             currentUser = user
         } catch {
             await TokenStore.shared.clear()
+        }
+    }
+    /// Giris yapmis kullanicinin sifresini degistirir.
+    func changePassword(current: String, new: String) async -> Bool {
+        do {
+            let body = ChangePasswordRequest(currentPassword: current, newPassword: new)
+            let _: User = try await APIClient.shared.request(
+                path: "/auth/change-password", method: .post, body: body
+            )
+            lastError = nil
+            return true
+        } catch {
+            lastError = (error as? APIError)?.errorDescription ?? "Şifre değiştirilemedi."
+            return false
         }
     }
 }
