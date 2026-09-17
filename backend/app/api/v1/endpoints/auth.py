@@ -8,6 +8,8 @@ from sqlalchemy import select
 from sqlalchemy import update as sa_update
 from sqlalchemy.ext.asyncio import AsyncSession
 
+
+
 from app.api.deps import get_current_user
 from app.core.config import settings
 from app.core.security import (
@@ -21,6 +23,7 @@ from app.db.session import get_db
 from app.models.password_reset import PasswordResetToken
 from app.models.user import User
 from app.schemas.auth import (
+    ChangePasswordRequest,
     ForgotPasswordRequest,
     ForgotPasswordResponse,
     LoginRequest,
@@ -180,3 +183,24 @@ async def reset_password(payload: ResetPasswordRequest, db: AsyncSession = Depen
     await db.commit()
     await db.refresh(user)
     return user
+
+@router.post("/change-password", response_model=UserOut)
+async def change_password(
+    payload: ChangePasswordRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Giris yapmis kullanicinin kendi sifresini degistirmesi.
+    Mevcut sifre dogrulanir - token calinmis olsa bile sifre degistirilemesin.
+    """
+    if not verify_password(payload.current_password, current_user.password_hash):
+        raise HTTPException(status_code=400, detail="Mevcut sifreniz hatali")
+
+    if payload.current_password == payload.new_password:
+        raise HTTPException(status_code=400, detail="Yeni sifre eskisiyle ayni olamaz")
+
+    current_user.password_hash = hash_password(payload.new_password)
+    await db.commit()
+    await db.refresh(current_user)
+    return current_user
