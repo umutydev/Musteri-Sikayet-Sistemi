@@ -1,4 +1,5 @@
-# Bankacılık Talep ve Şikayet Yönetim Sistemi
+# Solvia — Bankacılık Talep ve Şikayet Yönetim Sistemi
+
 
 Banka müşterilerinin talep veya şikayet oluşturabildiği, süreç durumunu takip edebildiği;
 banka personelinin ise bu kayıtları inceleyip sonuçlandırabildiği bir sistem.
@@ -94,19 +95,26 @@ API dokümantasyonu: http://localhost:8000/docs
 
 `seed.py` çalıştırıldığında oluşur:
 
-| Rol | E-posta | Şifre |
-|---|---|---|
-| Admin | admin@banka.com | Admin123! |
-| Temsilci | agent@banka.com | Agent123! |
-| Müşteri | Uygulamadan "Kayıt Ol" ile oluşturulur | — |
+| Rol | E-posta | Şifre | Ekip |
+|---|---|---|---|
+| Yönetici | admin@banka.com | Admin123! | — |
+| Temsilci | agent@banka.com | Agent123! | Kart İşlemleri Ekibi |
+| Temsilci | agent2@banka.com | Agent123! | Hesap ve Transfer Ekibi |
+| Temsilci | agent3@banka.com | Agent123! | Dijital Bankacılık Ekibi |
+| Müşteri | Uygulamadan "Kayıt Ol" ile oluşturulur | — | — |
 
-## Roller ve Yetkiler
+Temsilciler farklı ekiplere atanmıştır; her temsilci yalnızca kendi ekibinin
+sorumlu olduğu kategorilerdeki kayıtları havuzunda görür.
 
-| Rol | Yetkiler |
+**Kategori–ekip eşleşmesi**
+
+| Ekip | Kategoriler |
 |---|---|
-| **Müşteri** | Talep/şikayet oluşturur, yalnızca kendi kayıtlarını görüntüler ve takip eder |
-| **Temsilci** | Havuzdaki kayıtları üzerine alır, inceler, not ekler, sonuçlandırır |
-| **Admin** | Tüm kayıtları görür, kategori yönetir, raporlara erişir |
+| Kart İşlemleri | Kredi Kartı, ATM/Kart |
+| Hesap ve Transfer | Hesap İşlemleri |
+| Dijital Bankacılık | İnternet Bankacılığı |
+| Güvenlik | Dolandırıcılık/Güvenlik |
+| *(ekipsiz)* | Diğer — tüm temsilciler görür |
 
 ## Durum Akışı
 Yeni → İnceleniyor → (Ek Bilgi Bekleniyor ↔ İnceleniyor) → Çözüldü / Reddedildi → Kapatıldı
