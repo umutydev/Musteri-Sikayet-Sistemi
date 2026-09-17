@@ -44,6 +44,8 @@
 		4CA986FA304EF14E0024821A /* Ticket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CA986F9304EF14A0024821A /* Ticket.swift */; };
 		4CD552243057D446002E65CD /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD552233057D43E002E65CD /* Notification.swift */; };
 		4CD552263057D533002E65CD /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CD552253057D52F002E65CD /* NotificationService.swift */; };
+		4CEE8C46305C063F007C1239 /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEE8C45305C063C007C1239 /* Report.swift */; };
+		4CEE8C48305C0666007C1239 /* ReportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEE8C47305C0663007C1239 /* ReportService.swift */; };
 		4CEEDD77305ACC3B00BAF168 /* SolviaLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CEEDD76305ACC3B00BAF168 /* SolviaLogo.swift */; };
 		4CF405213057E0470014AB0B /* Attachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF405203057E0450014AB0B /* Attachment.swift */; };
 		4CF405233057E0B90014AB0B /* AttachmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CF405223057E0B50014AB0B /* AttachmentService.swift */; };
@@ -90,6 +92,8 @@
 		4CA986F9304EF14A0024821A /* Ticket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ticket.swift; sourceTree = "<group>"; };
 		4CD552233057D43E002E65CD /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		4CD552253057D52F002E65CD /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		4CEE8C45305C063C007C1239 /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
+		4CEE8C47305C0663007C1239 /* ReportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportService.swift; sourceTree = "<group>"; };
 		4CEEDD76305ACC3B00BAF168 /* SolviaLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SolviaLogo.swift; sourceTree = "<group>"; };
 		4CF405203057E0450014AB0B /* Attachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attachment.swift; sourceTree = "<group>"; };
 		4CF405223057E0B50014AB0B /* AttachmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttachmentService.swift; sourceTree = "<group>"; };
@@ -152,6 +156,7 @@
 		4C45FD5A3049B4A80005058F /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				4CEE8C45305C063C007C1239 /* Report.swift */,
 				4C85933A30598464003A7214 /* Team.swift */,
 				4C232B4730596DE600546DD7 /* UserManagement.swift */,
 				4CF405203057E0450014AB0B /* Attachment.swift */,
@@ -169,6 +174,7 @@
 		4CA986B1304EE3880024821A /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				4CEE8C47305C0663007C1239 /* ReportService.swift */,
 				4C85933C3059851A003A7214 /* Team Service.swift */,
 				4C232B4930596E2200546DD7 /* UserService.swift */,
 				4CF405223057E0B50014AB0B /* AttachmentService.swift */,
@@ -364,6 +370,8 @@
 				4CA986F0304EEF260024821A /* APIConfig.swift in Sources */,
 				4CA986F1304EEF260024821A /* TicketNote.swift in Sources */,
 				4CA986F2304EEF260024821A /* AuthRequests.swift in Sources */,
+				4CEE8C48305C0666007C1239 /* ReportService.swift in Sources */,
+				4CEE8C46305C063F007C1239 /* Report.swift in Sources */,
 				4CA986F3304EEF260024821A /* TicketRequests.swift in Sources */,
 				4CA986F4304EEF260024821A /* category.swift in Sources */,
 				4CA986F5304EEF260024821A /* user.swift in Sources */,
